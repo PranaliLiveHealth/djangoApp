@@ -1,0 +1,51 @@
+<html>
+<head>
+  <title>View Data</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" style="padding-top: 5%;">
+  <div class="col-sm-10">
+    <div  id="displaydata" class="col-md-12 col-sm-12 col-xs-12"></div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+$( document ).ready(function() {
+     $.ajax({
+            url:'/getAPI/',
+            type:'GET',
+            success: function(response)
+            {
+              if(response.code==200)
+              {
+                let file_data = response.file_data;
+                let keys = Object.keys(response.file_data)
+                recusriveslyRenderData(keys, file_data, 0);
+
+              }else {
+                alert('Internal server error');
+              }
+            },
+            error: function() {
+                alert('An error occurred...!');
+            }
+    });
+    var div = document.getElementById('displaydata');
+    recusriveslyRenderData = (keys, file_data, flag) =>{
+      keys.map((ele, index) =>{
+        let flag1 = flag+1;
+        div.innerHTML +=
+         "<div style='padding:5px, boder-radius:1px solid red'> <div>"+ele+"</div> <div> <span>"+file_data[ele].value+"</span><span>"+flag+"</span> </div></div>"
+        if(file_data[ele].child && file_data[ele].child.length)
+            {
+              let childKeys = Object.keys(file_data[ele].child[0]);
+              myfunction(childKeys, file_data[ele].child[0], flag1);
+          }
+      })
+    }
+
+    });
+</script>
+</body>
+</html>
