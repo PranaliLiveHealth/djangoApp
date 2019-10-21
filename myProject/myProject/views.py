@@ -3,7 +3,6 @@ from renderJSONResponse import JSONResponse
 
 def index(request):
     try:
-        print request
         return render(request,'viewPage.html')
     except :
         return JSONResponse({'code':500})
